@@ -1,25 +1,39 @@
 import { Args } from "grimoire-kolmafia";
-
-export const enum Lifestyle {
-  HARDCORE,
-  NORMAL,
-  CASUAL,
-}
+import { Path } from "kolmafia";
+import { Lifestyle } from "libram"
 
 export const enum AscensionPath {
-  UNRESTRICTED,
-  STANDARD,
-  TEETOTALER,
+  UNRESTRICTED = 0,
   BOOZETAFARIAN,
+  TEETOTALER,
   OXYGENARIAN,
+  BEES_HATE_YOU,
+  UNUSED_5,
+  SURPRISING_FIST,
+  TRENDY,
+  AVATAR_OF_BORIS,
+  BUGBEAR_INVASTION,
+  ZOMBIE_SLAYER,
+  CLASS_ACT,
+  AVATAR_OF_JARSLBERG,
+  UNUSED_13,
+  BIG,
+  KOLHS,
+  CLASS_ACT_II,
+  AVATAR_OF_SNEAKY_PETE,
+  SLOW_AND_STEADY,
+  HEAVY_RAINS,
+  UNUSED_20,
+  PICKY,
+  STANDARD,
 }
 
-export const pathAliases = [
+export const supportedPaths = [
   { path: AscensionPath.UNRESTRICTED, aliases: ["unrestricted", "casual", "normal"] },
-  { path: AscensionPath.STANDARD, aliases: ["standard"] },
-  { path: AscensionPath.TEETOTALER, aliases: ["teetotaler", "teet", "foodonly"] },
   { path: AscensionPath.BOOZETAFARIAN, aliases: ["boozetafarian", "booze", "boozeonly"] },
+  { path: AscensionPath.TEETOTALER, aliases: ["teetotaler", "teet", "foodonly"] },
   { path: AscensionPath.OXYGENARIAN, aliases: ["oxygenarian", "oxy"] },
+  { path: AscensionPath.STANDARD, aliases: ["standard"] },
 ];
 
 export const ascendyOptions = Args.create(
@@ -48,7 +62,7 @@ export const ascendyOptions = Args.create(
       },
       (value) => {
         value = value.toLowerCase();
-        const foundPath = pathAliases.find((element) => element.aliases.includes(value))
+        const foundPath = supportedPaths.find((element) => element.aliases.includes(value))
         if (foundPath !== undefined) {
           return foundPath.path;
         } else {
@@ -61,27 +75,29 @@ export const ascendyOptions = Args.create(
       {
         help: "Hardcore/Normal/Casual Ascension",
         options: [
-          [Lifestyle.HARDCORE, "Gangster shit."],
-          [Lifestyle.NORMAL, "(default) The usual."],
-          [Lifestyle.CASUAL, "Mostly for familiar runs."]
+          [Lifestyle.hardcore, "Gangster shit."],
+          [Lifestyle.softcore, "(default) The usual."],
+          [Lifestyle.casual, "Mostly for familiar runs."]
         ],
-        default: Lifestyle.NORMAL,
+        default: Lifestyle.softcore,
         setting: "",
       },
       (value) => {
         switch(value.toLowerCase()) {
           case "hardcore":
-            return Lifestyle.HARDCORE;
+          case "hc":
+            return Lifestyle.hardcore;
 
           case "normal":
           case "softcore":
-            return Lifestyle.NORMAL;
+          case "sc":
+            return Lifestyle.softcore;
 
           case "casual":
-            return Lifestyle.CASUAL;
+            return Lifestyle.casual;
           
           default:
-            return Lifestyle.NORMAL;
+            return Lifestyle.softcore;
         }
       },
       "Lifestyle Choice"
