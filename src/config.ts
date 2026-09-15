@@ -1,39 +1,74 @@
 import { Args } from "grimoire-kolmafia";
-import { Path } from "kolmafia";
 import { Lifestyle } from "libram"
 
 export const enum AscensionPath {
-  UNRESTRICTED = 0,
-  BOOZETAFARIAN,
-  TEETOTALER,
-  OXYGENARIAN,
-  BEES_HATE_YOU,
-  UNUSED_5,
-  SURPRISING_FIST,
-  TRENDY,
-  AVATAR_OF_BORIS,
-  BUGBEAR_INVASTION,
-  ZOMBIE_SLAYER,
-  CLASS_ACT,
-  AVATAR_OF_JARSLBERG,
-  UNUSED_13,
-  BIG,
-  KOLHS,
-  CLASS_ACT_II,
-  AVATAR_OF_SNEAKY_PETE,
-  SLOW_AND_STEADY,
-  HEAVY_RAINS,
-  UNUSED_20,
-  PICKY,
-  STANDARD,
+  NONE = 0,
+  BOOZETAFARIAN = 1,
+  TEETOTALER = 2,
+  OXYGENARIAN = 3,
+  BEES_HATE_YOU = 4,
+  SURPRISING_FIST = 6,
+  TRENDY = 7,
+  AVATAR_OF_BORIS = 8,
+  BUGBEAR_INVASTION = 9,
+  ZOMBIE_SLAYER = 10,
+  CLASS_ACT = 11,
+  AVATAR_OF_JARSLBERG = 12,
+  BIG = 14,
+  KOLHS = 15,
+  CLASS_ACT_II = 16,
+  AVATAR_OF_SNEAKY_PETE = 17,
+  SLOW_AND_STEADY = 18,
+  HEAVY_RAINS = 19,
+  PICKY = 21,
+  STANDARD = 22,
+  ACTUALLY_ED_THE_UNDYING = 23,
+  CRAZY_RANDOM_SUMMER = 24,
+  COMMUNITY_SERVICE = 25,
+  AVATAR_OF_WEST_OF_LOATHING = 26,
+  THE_SOURCE = 27,
+  NUCLEAR_AUTUMN = 28,
+  GELATINOUS_NOOB = 29,
+  LICENSE_TO_ADVENTURE = 30,
+  LIVE_ASCEND_REPEAT = 31,
+  POKEFAM = 32,
+  GLOVER = 33,
+  DISGUISES_DELIMIT = 34,
+  DARK_GYFFTE = 35,
+  CRAZY_RANDOM_SUMMER_TWO = 36,
+  KINGDOM_OF_EXPLOATHING = 37,
+  PATH_OF_THE_PLUMBER = 38,
+  LOWKEY = 39,
+  GREY_GOO = 40,
+  YOU_ROBOT = 41,
+  QUANTUM = 42,
+  WILDFIRE = 43,
+  GREY_YOU = 44,
+  JOURNEYMAN = 45,
+  DINOSAURS = 46,
+  SHADOWS_OVER_LOATHING = 47,
+  LEGACY_OF_LOATHING = 48,
+  SMALL = 49,
+  WEREPROFESSOR = 50,
+  ELEVEN_THINGS = 51,
+  AVANT_GUARD = 52,
+  Z_IS_FOR_ZOOTOMIST = 53,
+  HAT_TRICK = 54,
+  UNDER_THE_SEA = 55,
+  ADVENTURER_MEATS_WORLD = 56,
+  THRIFTY = 57,
+  BLUE_VS_RED = 58,
+
+  BAD_MOON = 999,
 }
 
 export const supportedPaths = [
-  { path: AscensionPath.UNRESTRICTED, aliases: ["unrestricted", "casual", "normal"] },
-  { path: AscensionPath.BOOZETAFARIAN, aliases: ["boozetafarian", "booze", "boozeonly"] },
-  { path: AscensionPath.TEETOTALER, aliases: ["teetotaler", "teet", "foodonly"] },
-  { path: AscensionPath.OXYGENARIAN, aliases: ["oxygenarian", "oxy"] },
-  { path: AscensionPath.STANDARD, aliases: ["standard"] },
+  { path: AscensionPath.NONE, aliases: ["none", "unrestricted", "casual", "normal"] },
+  //{ path: AscensionPath.BOOZETAFARIAN, aliases: ["boozetafarian", "booze", "boozeonly"] },
+  //{ path: AscensionPath.TEETOTALER, aliases: ["teetotaler", "teet", "foodonly"] },
+  //{ path: AscensionPath.OXYGENARIAN, aliases: ["oxygenarian", "oxy"] },
+
+  //{ path: AscensionPath.STANDARD, aliases: ["standard"] },
 ];
 
 export const ascendyOptions = Args.create(
@@ -53,11 +88,8 @@ export const ascendyOptions = Args.create(
     }),
     path: Args.custom<AscensionPath>(
       {
-        help: "Define the path you want to sim or Valhalla for.",
-        options: [
-
-        ],
-        default: AscensionPath.UNRESTRICTED,
+        help: "Define the path you want to sim or Valhalla for. See below.",
+        default: AscensionPath.NONE,
         setting: "",
       },
       (value) => {
@@ -66,7 +98,7 @@ export const ascendyOptions = Args.create(
         if (foundPath !== undefined) {
           return foundPath.path;
         } else {
-          return AscensionPath.UNRESTRICTED;
+          return AscensionPath.NONE;
         }
       },
       "The path you want to take bruv.",

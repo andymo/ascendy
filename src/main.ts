@@ -1,6 +1,7 @@
 import { Args } from "grimoire-kolmafia";
 import { abort, currentRound, handlingChoice, print, visitUrl } from "kolmafia";
-import { ascendyOptions, supportedPaths, AscensionPath, Lifestyle } from "./config";
+import { ascendyOptions, supportedPaths } from "./config";
+import { AscendyPath } from "./resources/core/path";
 
 function showHelp(): void {
     Args.showHelp(ascendyOptions);
@@ -23,8 +24,8 @@ function checkFree(): void {
   }
 }
 
-function getPath(): void {
-  
+function getPath(): AscendyPath {
+  return new AscendyPath();
 }
 
 export function main(argString = ""): void {
@@ -47,6 +48,7 @@ export function main(argString = ""): void {
     
     case "bedtime":
       checkFree();
+      getPath().bedtime();
       return;
     
     default:
