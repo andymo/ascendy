@@ -2,6 +2,8 @@ import { Args } from "grimoire-kolmafia";
 import { abort, currentRound, handlingChoice, print, visitUrl } from "kolmafia";
 import { ascendyOptions, supportedPaths } from "./config";
 import { AscendyPath } from "./resources/core/path";
+import { NonePath } from "./paths/0_none/path";
+import { UnderTheSeaPath } from "./paths/55_under_the_sea/path";
 
 function showHelp(): void {
     Args.showHelp(ascendyOptions);
@@ -24,9 +26,11 @@ function checkFree(): void {
   }
 }
 
+/*
 function getPath(): AscendyPath {
-  return new AscendyPath();
+  return new NonePath();
 }
+*/
 
 export function main(argString = ""): void {
   Args.fill(ascendyOptions, argString);
@@ -38,6 +42,7 @@ export function main(argString = ""): void {
   switch (ascendyOptions.command.toLocaleLowerCase()) {
     case "ascend":
       checkFree();
+      new UnderTheSeaPath().ascendy();
       return;
     
     case "sim":
@@ -48,7 +53,7 @@ export function main(argString = ""): void {
     
     case "bedtime":
       checkFree();
-      getPath().bedtime();
+      new NonePath().bedtime();
       return;
     
     default:

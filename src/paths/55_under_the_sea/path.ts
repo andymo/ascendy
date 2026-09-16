@@ -2,7 +2,7 @@ import { Path, toPath } from "kolmafia";
 import { AscendyPath, GashConfig } from "../../resources/core/path";
 import { $class, $item, Lifestyle } from "libram";
 
-export class NonePath extends AscendyPath {
+export class UnderTheSeaPath extends AscendyPath {
   path: Path = toPath(55);
   ascensionConfig: GashConfig = {
     playerClass: $class`Pastamancer`,
