@@ -1,10 +1,7 @@
 import { Args } from "grimoire-kolmafia";
 import { abort, currentRound, handlingChoice, myPath, print, visitUrl } from "kolmafia";
 import { ascendyOptions, supportedPaths } from "./config";
-import { AscendyPath, AscensionPath } from "./resources/core/path";
-import { NonePath } from "./paths/0_none/path";
-import { UnderTheSeaPath } from "./paths/55_under_the_sea/path";
-import { check } from "prettier";
+import { AscensionPath } from "./resources/core/path";
 import { getAscendyPath } from "./paths/lib";
 
 function showHelp(): void {
@@ -27,12 +24,6 @@ function checkFree(): void {
     );
   }
 }
-
-/*
-function getPath(): AscendyPath {
-  return new NonePath();
-}
-*/
 
 export function main(argString = ""): void {
   Args.fill(ascendyOptions, argString);
