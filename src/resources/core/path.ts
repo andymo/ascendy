@@ -1,6 +1,7 @@
 import { Outfit, OutfitSpec } from "grimoire-kolmafia"
-import { abort, Class, Item, Path, print } from "kolmafia";
-import { $familiar, $item, ascend, Lifestyle, prepareAscension } from "libram";
+import { abort, Class, haveEffect, Item, Path, print, useSkill } from "kolmafia";
+import { $effect, $familiar, $item, $skill, ascend, getRemainingLiver, have, Lifestyle, prepareAscension } from "libram";
+import { drinkSafely } from "../lib/diet";
 
 export const enum AscensionPath {
   NONE = 0,
@@ -92,9 +93,28 @@ export abstract class AscendyPath {
   }
 
   private nightcap(): void {
+    const outfit = new Outfit();
+
+    if (this.path.familiars && have($familiar`Stooper`)) outfit.equip($familiar`Stooper`);
+
+    if (have($skill`The Ode to Booze`) && haveEffect($effect`Ode to Booze`) < 11) useSkill($skill`The Ode to Booze`, 2);
+
+    const remainingLiver = getRemainingLiver();
+
+    if (remainingLiver > 1) {
+      abort(`${remainingLiver} liver left, idk how to handle this`)
+    } else if (remainingLiver < 0) {
+      print('Already drunk as a skunk.')
+      return;
+    }
+
+    // use up that last stooper'd liver space
+    if (remainingLiver === 1) {
+      drinkSafely($item`meadeorite`)
+    }
+
+    drinkSafely($item`emergency margarita`, {overdrink: true});
     // add constants for nightcaps of choice
-    // attempt nightcap logic here in nightcap incl. stooper
-    // abort if unused alcohol
     // check avatar and path and stuff too, so need path attribute as well as nightcaps
     print("No nightcap defined, not nightcapping.");
   }
@@ -113,7 +133,7 @@ export abstract class AscendyPath {
     outfit.dress();
   }
 
-  ascendy(): void {
+  gash(): void {
     // Custom stuff in preparation (e.g., codpiece smuggling)
     this.customPrepareAscension();
 

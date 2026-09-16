@@ -4,6 +4,7 @@ import { ascendyOptions, supportedPaths } from "./config";
 import { AscendyPath } from "./resources/core/path";
 import { NonePath } from "./paths/0_none/path";
 import { UnderTheSeaPath } from "./paths/55_under_the_sea/path";
+import { check } from "prettier";
 
 function showHelp(): void {
     Args.showHelp(ascendyOptions);
@@ -39,20 +40,20 @@ export function main(argString = ""): void {
     return showHelp();
   }
 
+  checkFree();
+
   switch (ascendyOptions.command.toLocaleLowerCase()) {
     case "ascend":
-      checkFree();
-      new UnderTheSeaPath().ascendy();
       return;
     
     case "sim":
       return;
     
     case "gash":
+      new UnderTheSeaPath().gash();
       return;
     
     case "bedtime":
-      checkFree();
       new NonePath().bedtime();
       return;
     
