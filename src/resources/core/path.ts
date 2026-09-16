@@ -1,7 +1,8 @@
 import { Outfit, OutfitSpec } from "grimoire-kolmafia"
-import { abort, Class, haveEffect, Item, Path, print, useSkill } from "kolmafia";
+import { abort, Class, haveEffect, Item, Path, print, use, useSkill } from "kolmafia";
 import { $effect, $familiar, $item, $skill, ascend, getRemainingLiver, have, Lifestyle, prepareAscension } from "libram";
 import { drinkSafely } from "../lib/diet";
+import { acquire } from "../lib/acquire";
 
 export const enum AscensionPath {
   NONE = 0,
@@ -133,6 +134,11 @@ export abstract class AscendyPath {
     outfit.dress();
   }
 
+  private campground(): void {
+    acquire($item`clockwork maid`, false, true);
+    use($item`clockwork maid`);
+  }
+
   gash(): void {
     // Custom stuff in preparation (e.g., codpiece smuggling)
     this.customPrepareAscension();
@@ -156,5 +162,6 @@ export abstract class AscendyPath {
   bedtime(): void {
     this.nightcap();
     this.jammies();
+    this.campground();
   }
 }
