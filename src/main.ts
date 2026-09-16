@@ -1,10 +1,11 @@
 import { Args } from "grimoire-kolmafia";
-import { abort, currentRound, handlingChoice, print, visitUrl } from "kolmafia";
+import { abort, currentRound, handlingChoice, myPath, print, visitUrl } from "kolmafia";
 import { ascendyOptions, supportedPaths } from "./config";
-import { AscendyPath } from "./resources/core/path";
+import { AscendyPath, AscensionPath } from "./resources/core/path";
 import { NonePath } from "./paths/0_none/path";
 import { UnderTheSeaPath } from "./paths/55_under_the_sea/path";
 import { check } from "prettier";
+import { getAscendyPath } from "./paths/lib";
 
 function showHelp(): void {
     Args.showHelp(ascendyOptions);
@@ -50,11 +51,11 @@ export function main(argString = ""): void {
       return;
     
     case "gash":
-      new UnderTheSeaPath().gash();
+      getAscendyPath(AscensionPath.UNDER_THE_SEA).gash();
       return;
     
     case "bedtime":
-      new NonePath().bedtime();
+      getAscendyPath(myPath()).bedtime();
       return;
     
     default:
