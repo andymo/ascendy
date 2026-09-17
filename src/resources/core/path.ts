@@ -96,7 +96,10 @@ export abstract class AscendyPath {
   private nightcap(): void {
     const outfit = new Outfit();
 
-    if (this.path.familiars && have($familiar`Stooper`)) outfit.equip($familiar`Stooper`);
+    if (this.path.familiars && have($familiar`Stooper`)) {
+      outfit.equip($familiar`Stooper`);
+      outfit.dress();
+    }
 
     if (have($skill`The Ode to Booze`) && haveEffect($effect`Ode to Booze`) < 11) useSkill($skill`The Ode to Booze`, 2);
 
