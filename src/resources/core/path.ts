@@ -1,8 +1,7 @@
 import { Outfit, OutfitSpec } from "grimoire-kolmafia"
-import { abort, Class, haveEffect, Item, Path, print, use, useSkill } from "kolmafia";
-import { $effect, $familiar, $item, $skill, ascend, getRemainingLiver, have, Lifestyle, prepareAscension } from "libram";
+import { abort, Class, haveEffect, Item, Path, print, retrieveItem, use, useSkill } from "kolmafia";
+import { $effect, $familiar, $skill, ascend, ChateauMantegna, getRemainingLiver, have, KolGender, Lifestyle, prepareAscension } from "libram";
 import { drinkSafely } from "../lib/diet";
-import { acquire } from "../lib/acquire";
 
 export const enum AscensionPath {
   NONE = 0,
@@ -65,29 +64,49 @@ export const enum AscensionPath {
   BAD_MOON = 999,
 }
 
-export type GashConfig = {
-  // valhalla
+export type AscendyPathConfig = {
   playerClass: Class,
   lifestyle: Lifestyle,
-  deli: Item,
-  pet: Item,
   moon: string,
 
-  // preparation
-  /*
-  garden: string,
-  eudora: string,
-  chateau: {
-    desk: string,
-    ceiling: string,
-    nightstand: string
-  }
-  */
+  ascend: {
+    prep: {
+      garden?: string,
+      eudora?: string,
+      chateau?: {
+        desk?: ChateauMantegna.Desk;
+        ceiling?: ChateauMantegna.Ceiling;
+        nightstand?: ChateauMantegna.Nightstand;
+      }
+    },
+    valhalla: {
+      deli?: Item,
+      pet?: Item,
+      gender?: KolGender,
+    },
+  },
+
+  diet?: {
+    nightcap?: Item,
+    nightcapStooper?: Item,
+  },
+
+  bedtime: {
+    jammiesSpec?: OutfitSpec,
+    chateau?: {
+      desk?: ChateauMantegna.Desk;
+      ceiling?: ChateauMantegna.Ceiling;
+      nightstand?: ChateauMantegna.Nightstand;
+    },
+    campground?: {
+      maid?: Item
+    }
+  },
 }
 
 export abstract class AscendyPath {
   abstract path: Path;
-  abstract ascensionConfig: GashConfig;
+  abstract config: AscendyPathConfig;
 
   private customPrepareAscension(): void {
     print('No custom preparation needed!');
@@ -95,6 +114,8 @@ export abstract class AscendyPath {
 
   private nightcap(): void {
     const outfit = new Outfit();
+    const stooperCap = this.config.diet?.nightcapStooper;
+    const nightcap = this.config.diet?.nightcap;
 
     if (this.path.familiars && have($familiar`Stooper`)) {
       outfit.equip($familiar`Stooper`);
@@ -113,33 +134,38 @@ export abstract class AscendyPath {
     }
 
     // use up that last stooper'd liver space
-    if (remainingLiver === 1) {
-      drinkSafely($item`meadeorite`)
+    if (remainingLiver === 1 && stooperCap) {
+      drinkSafely(stooperCap);
     }
 
-    drinkSafely($item`emergency margarita`, {overdrink: true});
-    // add constants for nightcaps of choice
-    // check avatar and path and stuff too, so need path attribute as well as nightcaps
-    print("No nightcap defined, not nightcapping.");
+    if (remainingLiver > 0) {
+      abort(`About to overcap with ${remainingLiver} left. Check config.`)
+    }
+
+    if (nightcap) {
+      drinkSafely(nightcap, {overdrink: true});
+    } else {
+      print("No nightcap... doing nothing I guess.")
+    }
   }
 
   private jammies(): void {
-    const spec: OutfitSpec = {
-      // pants have +10 fam weight rollover bonus
-      equip: [$item`li'l unicorn costume`, $item`ratskin pajama pants`],
-      familiar: $familiar`Trick-or-Treating Tot`,
-      modifier: "adv"
+    if (!this.config.bedtime.jammiesSpec) {
+      return;
     }
     const outfit = new Outfit();
-    if (!outfit.equip(spec)) {
+    if (!outfit.equip(this.config.bedtime.jammiesSpec)) {
       throw "Unable to equip all jammies, check familiar and stuff"
     }
     outfit.dress();
   }
 
   private campground(): void {
-    acquire($item`clockwork maid`, false, true);
-    use($item`clockwork maid`);
+    const maid = this.config.bedtime.campground?.maid;
+    if (maid) {
+      retrieveItem(maid, 1);
+      use(maid);
+    }
   }
 
   gash(): void {
@@ -153,12 +179,13 @@ export abstract class AscendyPath {
     
     ascend({
       path: this.path,
-      playerClass: this.ascensionConfig.playerClass,
+      playerClass: this.config.playerClass,
       lifestyle: Lifestyle.softcore,
+      kolGender: this.config.ascend.valhalla.gender ?? KolGender.female,
       //@ts-expect-error: InputMoonSign isn't exported.
-      moon: this.ascensionConfig.moon,
-      consumable: this.ascensionConfig.deli,
-      pet: this.ascensionConfig.pet,
+      moon: this.config.moon,
+      consumable: this.config.ascend.valhalla.deli,
+      pet: this.config.ascend.valhalla.pet,
     })
   }
 
