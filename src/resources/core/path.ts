@@ -86,11 +86,6 @@ export type AscendyPathConfig = {
     },
   },
 
-  diet?: {
-    nightcap?: Item,
-    nightcapStooper?: Item,
-  },
-
   bedtime: {
     jammiesSpec?: OutfitSpec,
     chateau?: {
@@ -100,6 +95,10 @@ export type AscendyPathConfig = {
     },
     campground?: {
       maid?: Item
+    },
+    nightcap?: {
+      stooper?: Item,
+      actual?: Item
     }
   },
 }
@@ -114,8 +113,8 @@ export abstract class AscendyPath {
 
   private nightcap(): void {
     const outfit = new Outfit();
-    const stooperCap = this.config.diet?.nightcapStooper;
-    const nightcap = this.config.diet?.nightcap;
+    const stooperCap = this.config.bedtime.nightcap?.stooper;
+    const nightcap = this.config.bedtime.nightcap?.actual;
 
     if (this.path.familiars && have($familiar`Stooper`)) {
       outfit.equip($familiar`Stooper`);
@@ -150,11 +149,12 @@ export abstract class AscendyPath {
   }
 
   private jammies(): void {
-    if (!this.config.bedtime.jammiesSpec) {
+    const spec = this.config.bedtime.jammiesSpec
+    if (!spec) {
       return;
     }
     const outfit = new Outfit();
-    if (!outfit.equip(this.config.bedtime.jammiesSpec)) {
+    if (!outfit.equip(spec)) {
       throw "Unable to equip all jammies, check familiar and stuff"
     }
     outfit.dress();

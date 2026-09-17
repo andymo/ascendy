@@ -15,10 +15,6 @@ export class NonePath extends AscendyPath {
         pet: $item`astral pet sweater`,
       }
     },
-    diet: {
-      nightcap: $item`emergency margarita`,
-      nightcapStooper: $item`meadeorite`,
-    },
     bedtime: {
       jammiesSpec: {
         // pants have +10 fam weight rollover bonus
@@ -28,6 +24,10 @@ export class NonePath extends AscendyPath {
       },
       campground: {
         maid: $item`clockwork maid`
+      },
+      nightcap: {
+        stooper: $item`meadeorite`,
+        actual: $item`emergency margarita`,
       }
     },
   }
