@@ -133,7 +133,7 @@ export abstract class AscendyPath {
     }
 
     // use up that last stooper'd liver space
-    if (remainingLiver === 1 && stooperCap) {
+    if (getRemainingLiver() === 1 && stooperCap) {
       drinkSafely(stooperCap);
     }
 
