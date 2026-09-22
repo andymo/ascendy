@@ -137,7 +137,7 @@ export abstract class AscendyPath {
       drinkSafely(stooperCap);
     }
 
-    if (remainingLiver > 0) {
+    if (getRemainingLiver() > 0) {
       abort(`About to overcap with ${remainingLiver} left. Check config.`)
     }
 
